@@ -27,8 +27,9 @@ class AutoEncoderDataSet(Dataset):
     def __getitem__(self, index):
         img_in = self.load_img(self.dir_in[index])
         img_gt = self.load_img(self.dir_gt[index])
+        sample = {'img_in': img_in, 'img_gt': img_gt}
 
-        return img_in, img_gt
+        return sample
 
 
 def main(ps):
@@ -36,13 +37,14 @@ def main(ps):
     f, axarr = plt.subplots(4, 2)
     auto_encoder_dataset = AutoEncoderDataSet(ps['DIR_IMG_IN'], ps['DIR_IMG_GT'])
     for i in range(len(auto_encoder_dataset)):
-        img_in, img_gt = auto_encoder_dataset[i]
+        sample = auto_encoder_dataset[i]
+        img_in, img_gt = sample['img_in'], sample['img_gt']
 
         axarr[i, 0].imshow(img_in)
         axarr[i, 0].set_title('Input image #{}'.format(i))
         axarr[i, 0].axis('off')
         axarr[i, 1].imshow(img_gt)
-        axarr[i, 1].set_title('Ground truth image #{}'.format(i))
+        axarr[i, 1].set_title('Ground truth #{}'.format(i))
         axarr[i, 1].axis('off')
 
         if i == 3:
@@ -57,3 +59,7 @@ if __name__ == "__main__":
         'DIR_IMG_GT': 'img/tr/gt/'
     }
     main(ps)
+
+
+
+
